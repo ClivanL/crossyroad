@@ -1,0 +1,141 @@
+html,body{
+  height:95vh;
+  max-width:100%;
+}
+
+#app{
+  display:grid;
+  grid-template-rows: repeat(16,40px);
+  background-color:grey;
+}
+#gamestatus{
+  display:grid;
+  grid-template-columns: 50% 50%;
+}
+#level{
+  color:red;
+  background-color:white;
+  width:100%;
+}
+#lives{
+  color:red;
+  background-color:white;
+  width:100%;
+}
+.row0{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row1{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row2{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row3{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row4{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row5{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row6{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row7{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row8{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row9{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row10{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row11{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row12{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row13{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.row14{
+  display:grid;
+  grid-template-columns: repeat(15,40px);
+  background-color:grey;
+}
+.road{
+  background-color:black;
+  color:black;
+  height:100%;
+  width:100%;
+}
+.grass{
+  background-color:green;
+  color:green;
+  height:100%;
+  width:100%;
+}
+#player{
+  background-color:purple;
+  color:purple;
+  height:100%;
+  width:100%;
+}
+
+.car{
+  background-color:red;
+  color:red;
+  height:100%;
+  width:100%;
+}
+
+.end{
+  background-color:yellow;
+  color:yellow;
+  height:100%;
+  width:100%;
+}
+
+.reversecar{
+  height:100%;
+  width:100%;
+}
+
+.obstacle{
+  height:100%;
+  width:100%;
+}
