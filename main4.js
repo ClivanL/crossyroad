@@ -361,7 +361,7 @@ const startGame=()=>{
         x++;
         carMovement(x,app.gameSpeed);
         reversecarMovement(x,app.gameSpeed);
-        },1/100000);
+        },1);
     createMap();
     findCar();
     findReverseCar();
