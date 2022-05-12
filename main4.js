@@ -105,6 +105,7 @@ const gameToHighscore=()=>{
 
 const highscoreToMainPage=()=>{
     $("#endgame").hide();
+    $("#app").show();
     startGame();
     createMap();
 }
