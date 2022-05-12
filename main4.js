@@ -33,8 +33,8 @@ const app = {
     carPos:[],
     reversecarPos:[],
     lives:3,
-    gameSpeed:100,
-    gameSpeedLevels:[100,50,30,20,10,1],
+    gameSpeed:1000,
+    gameSpeedLevels:[1000,50,30,20,10,1],
     level:1
   };
 
