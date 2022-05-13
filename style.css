@@ -1,11 +1,14 @@
 html,body{
   height:95vh;
   max-width:100%;
+  background-image: url("background.jpeg");
+  justify-content:center;
 }
 
 #frontpage{
   display:grid;
   grid-template: 50px 50px 200px /100px 200px;
+  justify-content:center;
 }
 #crossyroad{
   width:100%;
@@ -18,14 +21,16 @@ html,body{
 }
 #gameover{
   max-width:1000px;
-  max-height:600px
+  max-height:600px;
+  justify-content:center;
 }
 
 #app{
   display:grid;
   grid-template-rows: repeat(16,40px);
   grid-template-columns: repeat (15,40px);
-  background-color:grey;
+  /* background-color:grey; */
+  justify-content:center;
 }
 #gamestatus{
   display:grid;

@@ -2,7 +2,6 @@ import './style.css'
 import $ from "jquery"
 
 const inputPlayerName=()=>{
-  console.log("1");
     $("#app").append($("<div>").attr("id","frontpage"));
     const $playerName=$("<div>").text("Enter your name: ")
     $("#frontpage").append($playerName).append($("<input>").attr("placeholder","Player Name"));
@@ -37,8 +36,7 @@ const app = {
     lives:3,
     gameSpeed:100,
     gameSpeedLevels:[100,50,30,20,10,1],
-    level:1,
-    gameOver: new Audio("car-crash-sound-effect_5tCU2cAR.mp3")
+    level:1
   };
 const randomMapGen=()=>{
 
@@ -104,7 +102,7 @@ const createMap = () => {
     }
   }
 const gameToHighscore=()=>{
-    $("#app").hide();
+    $("#app").clear();
     highscore();
 }
 
@@ -125,8 +123,6 @@ const highscore=()=>{
 
 const restartGame=()=>{
 // clearInterval(gameOn);
-console.log("6.1");
-app.gameOver.play();
 app.lives--;
 if (app.lives===0){
   clearInterval(gameOn);
@@ -145,12 +141,14 @@ $("#app").empty();
 const levelUp=()=>{
   console.log("level up");
   app.level++;
+  console.log(app.level);
   $("#app").empty();
   app.gameState = [...app.originalGameState];
   app.charPos = app.charPosStart;
   app.previousPosTerrain = "G";
   app.gameState[app.charPos[0]][app.charPos[1]] = "Y";
   app.gameSpeed=app.gameSpeedLevels[app.level-1];
+  console.log(app.gameSpeed);
   createMap();
 }
 
@@ -203,14 +201,12 @@ const levelUp=()=>{
   
         if (newPos[i][1] !== 0) {
           if(checkCollision(app.gameState[newPos[i][0]][newPos[i][1]])==="crash"){
-            console.log("5.1");
             restartGame();
           }
           app.gameState[newPos[i][0]][newPos[i][1]] = "C";
           app.gameState[newPos[i][0]][newPos[i][1] - 1] = "R";
         }
         else {
-          console.log("5.2");
           app.gameState[newPos[i][0]][newPos[i][1]] = "C";
           app.gameState[newPos[i][0]][app.gameState[newPos[i][0]].length - 1] = "R";
         }
@@ -237,14 +233,12 @@ const levelUp=()=>{
   
         if (newPos[i][1] !== app.gameState[newPos[i][0]].length-1) {
           if(checkCollision(app.gameState[newPos[i][0]][newPos[i][1]])==="crash"){
-            console.log("5.1");
             restartGame();
           }
           app.gameState[newPos[i][0]][newPos[i][1]] = "RC";
           app.gameState[newPos[i][0]][newPos[i][1] + 1] = "R";
         }
         else {
-          console.log("5.2");
           app.gameState[newPos[i][0]][newPos[i][1]] = "RC";
           app.gameState[newPos[i][0]][0] = "R";
         }
@@ -257,6 +251,7 @@ const levelUp=()=>{
   const moveUp = (row, column) => {
     app.gameState[row][column] = app.previousPosTerrain;
     if (checkEnd(app.gameState[row-1][column])==="level-up"){
+      console.log("im in");
       levelUp();
     }
     else if (checkCollision(app.gameState[row - 1][column]) !== "crash") {
@@ -334,7 +329,6 @@ const levelUp=()=>{
   }
 
   const moveCharacter = (event) => {
-    console.log("4");
     const key = event.which;
     //KEYS: 37->left, 38->up, 39->right, 40->down
     const row = app.charPos[0];
@@ -362,7 +356,6 @@ const levelUp=()=>{
 let gameOn;
 
 const startGame=()=>{
-  console.log("3");
     app.gameState=[...app.originalGameState];
     app.charPos = [...app.charPosStart];
     app.level=1;
@@ -381,7 +374,6 @@ const startGame=()=>{
 }
 
 const frontPageToGame=()=>{
-  console.log("2");
     $("#frontpage").hide("slow");
     startGame();
 }
