@@ -6,7 +6,8 @@ const inputPlayerName=()=>{
     const $playerName=$("<div>").text("Enter your name: ")
     $("#frontpage").append($playerName).append($("<input>").attr("placeholder","Player Name"));
     $("#frontpage").append($("<button>").attr("id","start").text("Hit button to start crossing the road"));
-    $("button").on("click",frontPageToGame);
+    $("#frontpage").append($("<img>").attr("src","crossyroad.jpeg").attr("id","crossyroad"));
+    $("button").on("click",frontPageToGame).attr("id","frontpagebutton");
 }
 const app = {
   
@@ -15,16 +16,16 @@ const app = {
       ["RC", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
       ["R", "R", "R", "R", "R", "RC", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
       ["R", "R", "R", "C", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
-      ["X", "X", "O", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X"],
-      ["X", "X", "X", "X", "O", "X", "O", "O", "X", "X", "X", "X", "X", "X", "X"],
+      ["X", "X", "O", "X", "X", "X", "X", "X", "X", "X", "O", "X", "O", "X", "O"],
+      ["X", "X", "X", "X", "O", "X", "O", "O", "O", "O", "X", "X", "X", "X", "X"],
       ["R", "R", "R", "C", "R", "R", "R", "R", "R", "C", "R", "R", "R", "R", "R"],
       ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "RC", "R", "R"],
       ["R", "R", "R", "R", "R", "R", "RC", "R", "R", "R", "R", "R", "R", "R", "R"],
       ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "C", "R", "R", "R", "R"],
-      ["X", "X", "X", "X", "O", "O", "O", "X", "O", "X", "O", "O", "X", "X", "X"],
+      ["O", "O", "O", "O", "O", "O", "O", "X", "O", "X", "O", "O", "X", "X", "X"],
       ["R", "R", "R", "R", "R", "RC", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
       ["R", "R", "R", "C", "R", "R", "R", "R", "C", "R", "R", "R", "R", "R", "R"],
-      ["X", "X", "X", "X", "X", "X", "O", "X", "X", "O", "X", "X", "X", "X", "X"],
+      ["X", "X", "X", "X", "X", "X", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
       ["X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X", "X"]],
       gameState: [],
     charPos: [],
@@ -33,11 +34,13 @@ const app = {
     carPos:[],
     reversecarPos:[],
     lives:3,
-    gameSpeed:1000,
-    gameSpeedLevels:[1000,50,30,20,10,1],
+    gameSpeed:100,
+    gameSpeedLevels:[100,50,30,20,10,1],
     level:1
   };
+const randomMapGen=()=>{
 
+}
 
 // const ModToTerrain = (char) => {
 //     if (char === "X") {
@@ -107,12 +110,11 @@ const highscoreToMainPage=()=>{
     $("#endgame").hide();
     $("#app").show();
     startGame();
-    createMap();
 }
 
 const highscore=()=>{
-    const $endgame=$("<div>").attr("id","endgame").text("GAME OVER, you reached level "+app.level).css({"font-size":"100px"});
-  $("body").append($endgame);
+    const $endgame=$("<div>").attr("id","endgame").text("You reached level "+app.level+"!!!!!").css({"font-size":"30px"});
+  $("body").append($("<img>").attr("src","gameover.png").attr("id","gameover")).append($endgame);
   $("#endgame").append($("<button>").text("Try again").attr("id","tryagain"));
     $("#tryagain").on("click", highscoreToMainPage);
 
@@ -120,21 +122,23 @@ const highscore=()=>{
 
 
 const restartGame=()=>{
-clearInterval(gameOn);
+// clearInterval(gameOn);
 app.lives--;
 if (app.lives===0){
+  clearInterval(gameOn);
   gameToHighscore();
 }
+else{
 $("#app").empty();
   app.gameState = [...app.originalGameState];
   app.charPos = app.charPosStart;
   app.previousPosTerrain = "G";
   app.gameState[app.charPos[0]][app.charPos[1]] = "Y";
   createMap();
+}
 
 }
 const levelUp=()=>{
-  clearInterval(gameOn);
   console.log("level up");
   app.level++;
   console.log(app.level);
@@ -146,7 +150,6 @@ const levelUp=()=>{
   app.gameSpeed=app.gameSpeedLevels[app.level-1];
   console.log(app.gameSpeed);
   createMap();
-  setInterval(gameOn);
 }
 
   const findCar = () => {
@@ -358,7 +361,7 @@ const startGame=()=>{
     app.level=1;
     app.previousPosTerrain = "G";
     app.gameState[app.charPos[0]][app.charPos[1]] = "Y";
-    const gameOn=setInterval(()=>{
+    gameOn=setInterval(()=>{
         x++;
         carMovement(x,app.gameSpeed);
         reversecarMovement(x,app.gameSpeed);
