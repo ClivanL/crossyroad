@@ -1,9 +1,42 @@
 import './style.css'
 import $ from "jquery"
+import grass from './grass.jpeg'
+import road from './road.jpeg'
+import player from './char.jpeg'
+import car from './car.jpeg'
+import end from './portal.jpeg'
+import reversecar from './reversecar.jpeg'
+import obstacle from './obstacle.png'
+
+// const ModToTerrain = (char) => {
+//   if (char === "X") {
+//     return $("<img>").addClass("grass").attr("src",grass);
+//   }
+//   if (char === "R") {
+//     return $("<img>").addClass("road").attr("src",road);
+//   }
+//   if (char === "Y") {
+//     return $("<img>").attr("id", "player").attr("src",player);
+//   }
+//   if (char === "C") {
+//     return $("<img>").addClass("car").attr("src",car);
+//   }
+//   if (char === "E") {
+//     return $("<img>").addClass("end").attr("src",end);
+//   }
+//   if (char === "RC") {
+//       return $("<img>").addClass("reversecar").attr("src",reversecar);
+//     }
+//     if (char === "O") {
+//       return $("<img>").addClass("obstacle").attr("src",obstacle);
+//     }
+// }
 
 const inputPlayerName=()=>{
-    $("#app").append($("<div>").attr("id","frontpage"));
-    const $playerName=$("<div>").text("Enter your name: ")
+    $("#app").hide();
+  console.log("start page");
+    $("body").append($("<div>").attr("id","frontpage"));
+    const $playerName=$("<div>").text("Enter your name: ");
     $("#frontpage").append($playerName).append($("<input>").attr("placeholder","Player Name"));
     $("#frontpage").append($("<button>").attr("id","start").text("Hit button to start crossing the road"));
     $("#frontpage").append($("<img>").attr("src","crossyroad.jpeg").attr("id","crossyroad"));
@@ -35,8 +68,9 @@ const app = {
     reversecarPos:[],
     lives:3,
     gameSpeed:100,
-    gameSpeedLevels:[100,50,30,20,10,1],
-    level:1
+    gameSpeedLevels:[100,50,30,20,10,1,0.5,0.01,0.001],
+    level:1,
+    gameOver: new Audio("car-crash-sound-effect_5tCU2cAR.mp3")
   };
 const randomMapGen=()=>{
 
@@ -59,35 +93,57 @@ const randomMapGen=()=>{
 //       return $("<span>").text(char).addClass("end").attr("img","portal.jpeg");
 //     }
 //   }
-  const ModToTerrain = (char) => {
-    if (char === "X") {
-      return $("<img>").addClass("grass").attr("src","grass.jpeg");
-    }
-    if (char === "R") {
-      return $("<img>").addClass("road").attr("src","road.jpeg");
-    }
-    if (char === "Y") {
-      return $("<img>").attr("id", "player").attr("src","char.jpeg");
-    }
-    if (char === "C") {
-      return $("<img>").addClass("car").attr("src","car.jpeg");
-    }
-    if (char === "E") {
-      return $("<img>").addClass("end").attr("src","portal.jpeg");
-    }
-    if (char === "RC") {
-        return $("<img>").addClass("reversecar").attr("src","reversecar.jpeg");
-      }
-      if (char === "O") {
-        return $("<img>").addClass("obstacle").attr("src","obstacle.png");
-      }
+
+const ModToTerrain = (char) => {
+  if (char === "X") {
+    return $("<img>").addClass("grass").attr("src",grass);
   }
+  if (char === "R") {
+    return $("<img>").addClass("road").attr("src",road);
+  }
+  if (char === "Y") {
+    return $("<img>").attr("id", "player").attr("src",player);
+  }
+  if (char === "C") {
+    return $("<img>").addClass("car").attr("src",car);
+  }
+  if (char === "E") {
+    return $("<img>").addClass("end").attr("src",end);
+  }
+  if (char === "RC") {
+      return $("<img>").addClass("reversecar").attr("src",reversecar);
+    }
+    if (char === "O") {
+      return $("<img>").addClass("obstacle").attr("src",obstacle);
+    }
+}
+  // const ModToTerrain = (char) => {
+  //   if (char === "X") {
+  //     return $("<img>").addClass("grass").attr("src","grass.jpeg");
+  //   }
+  //   if (char === "R") {
+  //     return $("<img>").addClass("road").attr("src","road.jpeg");
+  //   }
+  //   if (char === "Y") {
+  //     return $("<img>").attr("id", "player").attr("src","char.jpeg");
+  //   }
+  //   if (char === "C") {
+  //     return $("<img>").addClass("car").attr("src","car.jpeg");
+  //   }
+  //   if (char === "E") {
+  //     return $("<img>").addClass("end").attr("src","portal.jpeg");
+  //   }
+  //   if (char === "RC") {
+  //       return $("<img>").addClass("reversecar").attr("src","reversecar.jpeg");
+  //     }
+  //     if (char === "O") {
+  //       return $("<img>").addClass("obstacle").attr("src","obstacle.png");
+  //     }
+  // }
 
 //X->grass, R->road C->car Y-Character
 const createMap = () => {
     $("#app").empty();
-    console.log(app.level);
-    console.log(app.lives);
     const $lives=$("<div>").text("lives remaining: "+app.lives).attr("id","lives");
     const $level=$("<div>").text("level: " +app.level).attr("id","level");
     const $div=$("<div>").attr("id","gamestatus").append($level).append($lives);
@@ -102,18 +158,22 @@ const createMap = () => {
     }
   }
 const gameToHighscore=()=>{
-    $("#app").clear();
+    $("#app").hide();
     highscore();
 }
 
 const highscoreToMainPage=()=>{
    $("body").empty();
+   console.log(app.lives,"highscoretomainpage");
    $("body").append($("<div>").attr("id","app"));
     inputPlayerName();
 }
 
 const highscore=()=>{
-    const $endgame=$("<div>").attr("id","endgame").text("You reached level "+app.level+"!!!!!").css({"font-size":"30px"});
+    if(localStorage.getItem("highscore")===null ||localStorage.getItem("highscore")[0]<app.level){
+    localStorage.setItem("highscore", [app.level,app.playername]);
+    }
+    const $endgame=$("<div>").attr("id","endgame").text("You reached level "+app.level+"!!!!! "+"Highest score is "+ localStorage.getItem("highscore")[0]+" by "+localStorage.getItem("highscore")[1]).css({"font-size":"30px"});
   $("body").append($("<img>").attr("src","gameover.png").attr("id","gameover")).append($endgame);
   $("#endgame").append($("<button>").text("Try again").attr("id","tryagain"));
     $("#tryagain").on("click", highscoreToMainPage);
@@ -123,16 +183,21 @@ const highscore=()=>{
 
 const restartGame=()=>{
 // clearInterval(gameOn);
+// app.gameOver.play();
+console.log("deduct lives");
 app.lives--;
 if (app.lives===0){
+    console.log(app.lives);
   clearInterval(gameOn);
   gameToHighscore();
 }
 else{
+    console.log(app.lives);
 $("#app").empty();
   app.gameState = [...app.originalGameState];
+  console.log("after restart",app.originalGameState);
   app.charPos = app.charPosStart;
-  app.previousPosTerrain = "G";
+  app.previousPosTerrain = "X";
   app.gameState[app.charPos[0]][app.charPos[1]] = "Y";
   createMap();
 }
@@ -141,14 +206,12 @@ $("#app").empty();
 const levelUp=()=>{
   console.log("level up");
   app.level++;
-  console.log(app.level);
   $("#app").empty();
   app.gameState = [...app.originalGameState];
   app.charPos = app.charPosStart;
   app.previousPosTerrain = "G";
   app.gameState[app.charPos[0]][app.charPos[1]] = "Y";
   app.gameSpeed=app.gameSpeedLevels[app.level-1];
-  console.log(app.gameSpeed);
   createMap();
 }
 
@@ -170,8 +233,16 @@ const levelUp=()=>{
       }
     }
   }
+  const checkHumanCollision = (newPos) => {
+    if (newPos === "Y") {
+        console.log("newPos:",newPos);
+      return "crash";
+    }
+  }
+
   const checkCollision = (newPos) => {
-    if (newPos === "C" || newPos === "Y" ||newPos==="RC") {
+    if (newPos === "C" ||newPos==="RC") {
+        console.log("newPos:",newPos);
       return "crash";
     }
   }
@@ -196,11 +267,14 @@ const levelUp=()=>{
           }
         }
       )
-      app.carPos=newPos;
+      app.carPos=[...newPos];
+      console.log(app.carPos);
+      console.log(newPos);
       for (let i = 0; i < newPos.length; i++) {
   
         if (newPos[i][1] !== 0) {
-          if(checkCollision(app.gameState[newPos[i][0]][newPos[i][1]])==="crash"){
+          if(checkHumanCollision(app.gameState[newPos[i][0]][newPos[i][1]])==="crash"){
+              console.log("crash by car");
             restartGame();
           }
           app.gameState[newPos[i][0]][newPos[i][1]] = "C";
@@ -228,19 +302,20 @@ const levelUp=()=>{
           }
         }
       )
-      app.reversecarPos=newPos;
-      for (let i = 0; i < newPos.length; i++) {
+      app.reversecarPos=[...newPos];
+      for (let i = 0; i < app.reversecarPos.length; i++) {
   
-        if (newPos[i][1] !== app.gameState[newPos[i][0]].length-1) {
-          if(checkCollision(app.gameState[newPos[i][0]][newPos[i][1]])==="crash"){
+        if (app.reversecarPos[i][1] !== app.gameState[app.reversecarPos[i][0]].length-1) {
+          if(checkHumanCollision(app.gameState[app.reversecarPos[i][0]][app.reversecarPos[i][1]])==="crash"){
+              console.log("crash by RC");
             restartGame();
           }
-          app.gameState[newPos[i][0]][newPos[i][1]] = "RC";
-          app.gameState[newPos[i][0]][newPos[i][1] + 1] = "R";
+          app.gameState[app.reversecarPos[i][0]][app.reversecarPos[i][1]] = "RC";
+          app.gameState[app.reversecarPos[i][0]][app.reversecarPos[i][1] + 1] = "R";
         }
         else {
-          app.gameState[newPos[i][0]][newPos[i][1]] = "RC";
-          app.gameState[newPos[i][0]][0] = "R";
+          app.gameState[app.reversecarPos[i][0]][app.reversecarPos[i][1]] = "RC";
+          app.gameState[app.reversecarPos[i][0]][0] = "R";
         }
         createMap();
       }
@@ -251,7 +326,6 @@ const levelUp=()=>{
   const moveUp = (row, column) => {
     app.gameState[row][column] = app.previousPosTerrain;
     if (checkEnd(app.gameState[row-1][column])==="level-up"){
-      console.log("im in");
       levelUp();
     }
     else if (checkCollision(app.gameState[row - 1][column]) !== "crash") {
@@ -260,7 +334,10 @@ const levelUp=()=>{
       app.charPos = [row - 1, column];
     }
 
-    else restartGame();
+    else{ 
+        console.log("player hits car");
+        restartGame(); 
+    }
   }
   
   const moveLeft = (row, column) => {
@@ -274,7 +351,10 @@ const levelUp=()=>{
       app.charPos = [row, column - 1];
     }
 
-    else restartGame();
+    else{ 
+        console.log("player hits car");
+        restartGame(); 
+    }
   }
   
   const moveRight = (row, column) => {
@@ -288,7 +368,10 @@ const levelUp=()=>{
       app.charPos = [row, column + 1];
     }
 
-    else restartGame();
+    else{ 
+        console.log("player hits car");
+        restartGame(); 
+    }
   }
   
   const moveDown = (row, column) => {
@@ -298,7 +381,10 @@ const levelUp=()=>{
       app.gameState[row + 1][column] = "Y";
       app.charPos = [row + 1, column];
     }
-    else restartGame();
+    else{ 
+        console.log("player hits car");
+        restartGame(); 
+    }
   }
 
 
@@ -356,25 +442,34 @@ const levelUp=()=>{
 let gameOn;
 
 const startGame=()=>{
+  console.log("start game");
+  console.log(app.originalGameState);
     app.gameState=[...app.originalGameState];
     app.charPos = [...app.charPosStart];
+    console.log(app.lives);
+    app.lives=3;
     app.level=1;
-    app.previousPosTerrain = "G";
+    app.previousPosTerrain = "X";
     app.gameState[app.charPos[0]][app.charPos[1]] = "Y";
+    findCar();
+    findReverseCar();
+    let x = 0;
     gameOn=setInterval(()=>{
         x++;
         carMovement(x,app.gameSpeed);
         reversecarMovement(x,app.gameSpeed);
         },1);
-    createMap();
-    findCar();
-    findReverseCar();
-    let x = 0;
-    $(document).on("keypress", moveCharacter);
+    // createMap();
+    
+  
+    
 }
 
 const frontPageToGame=()=>{
+  console.log("2");
+ app.playername=$("input").val();
     $("#frontpage").hide("slow");
+    $("#app").show();
     startGame();
 }
 
@@ -383,5 +478,5 @@ const frontPageToGame=()=>{
 
 $(()=>{
     inputPlayerName();
-
+    $(document).on("keypress", moveCharacter);
 })

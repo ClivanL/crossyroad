@@ -2,6 +2,7 @@ import './style.css'
 import $ from "jquery"
 
 const inputPlayerName=()=>{
+
   console.log("1");
     $("#app").append($("<div>").attr("id","frontpage"));
     const $playerName=$("<div>").text("Enter your name: ")
@@ -382,6 +383,8 @@ const startGame=()=>{
 
 const frontPageToGame=()=>{
   console.log("2");
+  const playername=$("input").val();
+  console.log(playername);
     $("#frontpage").hide("slow");
     startGame();
 }
