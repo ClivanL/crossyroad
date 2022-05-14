@@ -7,6 +7,8 @@ import car from './car.jpeg'
 import end from './portal.jpeg'
 import reversecar from './reversecar.jpeg'
 import obstacle from './obstacle.png'
+import crossyroad from './crossyroad.jpeg'
+import gameover from './gameover.png'
 
 // const ModToTerrain = (char) => {
 //   if (char === "X") {
@@ -39,7 +41,7 @@ const inputPlayerName=()=>{
     const $playerName=$("<div>").text("Enter your name: ");
     $("#frontpage").append($playerName).append($("<input>").attr("placeholder","Player Name"));
     $("#frontpage").append($("<button>").attr("id","start").text("Hit button to start crossing the road"));
-    $("#frontpage").append($("<img>").attr("src","crossyroad.jpeg").attr("id","crossyroad"));
+    $("#frontpage").append($("<img>").attr("src",crossyroad).attr("id","crossyroad"));
     $("button").on("click",frontPageToGame).attr("id","frontpagebutton");
 }
 const app = {
@@ -174,7 +176,7 @@ const highscore=()=>{
     localStorage.setItem("highscore", [app.level,app.playername]);
     }
     const $endgame=$("<div>").attr("id","endgame").text("You reached level "+app.level+"!!!!! "+"Highest score is "+ localStorage.getItem("highscore")[0]+" by "+localStorage.getItem("highscore")[1]).css({"font-size":"30px"});
-  $("body").append($("<img>").attr("src","gameover.png").attr("id","gameover")).append($endgame);
+  $("body").append($("<img>").attr("src",gameover).attr("id","gameover")).append($endgame);
   $("#endgame").append($("<button>").text("Try again").attr("id","tryagain"));
     $("#tryagain").on("click", highscoreToMainPage);
 
