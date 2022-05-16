@@ -238,10 +238,10 @@ const findCar = () => {
     //KEYS: 37->left, 38->up, 39->right, 40->down
     const row = app.charPos[0];
     const column = app.charPos[1];
-    const left = 37;
-    const up = 38;
-    const right = 39;
-    const down = 40;
+    const left = 97;
+    const up = 119;
+    const right = 100;
+    const down = 115;
   
     if (key === left && checkCondition(row, column) !== "left-bound" && checkCondition(row,column-1)!=="obstacle") {
       moveLeft(row, column);
