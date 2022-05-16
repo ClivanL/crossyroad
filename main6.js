@@ -12,6 +12,8 @@ import gameover from './gameover.png'
 import train from './train.png'
 import traintrack from './traintrack.png'
 import crossyroadicon from './crossyroadicon.png'
+import carcrashsound from './car-crash-sound-effect_5tCU2cAR.mp3'
+import levelupsound from './levelup.mp3'
 
 const inputPlayerName=()=>{
     $("#app").hide();
@@ -60,8 +62,8 @@ const app = {
     gameSpeed:100,
     gameSpeedLevels:[100,50,25,12,6,3,2,1,1,1,1,1,1,1],
     level:1,
-    gameOver: new Audio("car-crash-sound-effect_5tCU2cAR.mp3"),
-    levelUp: new Audio("levelup.mp3")
+    gameOver: new Audio(carcrashsound),
+    levelUp: new Audio(levelupsound)
   };
 
   const createMap = () => {
