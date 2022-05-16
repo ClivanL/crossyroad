@@ -2,16 +2,13 @@ import './style.css'
 import $ from "jquery"
 import grass from './grass.jpeg'
 import road from './road.jpeg'
-import player from './char.png'
+import player from './char.jpeg'
 import car from './car.jpeg'
 import end from './portal.jpeg'
 import reversecar from './reversecar.jpeg'
 import obstacle from './obstacle.png'
 import crossyroad from './crossyroad.jpeg'
 import gameover from './gameover.png'
-import train from './train.png'
-import traintrack from './traintrack.png'
-import crossyroadicon from './crossyroadicon.png'
 
 const inputPlayerName=()=>{
     $("#app").hide();
@@ -21,7 +18,6 @@ const inputPlayerName=()=>{
     $("#frontpage").append($playerName).append($("<input>").attr("placeholder","Player Name"));
     $("#frontpage").append($("<button>").attr("id","start").text("Hit button to start crossing the road"));
     $("#frontpage").append($("<img>").attr("src",crossyroad).attr("id","crossyroad"));
-    $("#frontpage").append($("<img>").attr("src",crossyroadicon).attr("id","crossyroadicon"));
     $("button").on("click",frontPageToGame).attr("id","frontpagebutton");
 }
 
@@ -42,7 +38,7 @@ const app = {
       ["X", "X", "O", "X", "X", "X", "X", "X", "X", "X", "O", "X", "O", "X", "O"],
       ["X", "X", "X", "X", "O", "X", "O", "O", "O", "O", "X", "X", "X", "X", "X"],
       ["R", "R", "R", "C", "R", "R", "R", "R", "R", "C", "R", "R", "R", "R", "R"],
-      ["TT", "TT", "TT", "TT", "TT", "TT", "TT", "TT", "TT", "TT", "TT", "TT", "TT", "TT", "TT"],
+      ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "RC", "R", "R"],
       ["R", "R", "R", "R", "R", "R", "RC", "R", "R", "R", "R", "R", "R", "R", "R"],
       ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "C", "R", "R", "R", "R"],
       ["O", "O", "O", "O", "O", "O", "O", "X", "O", "X", "O", "O", "X", "X", "X"],
@@ -60,8 +56,7 @@ const app = {
     gameSpeed:100,
     gameSpeedLevels:[100,50,25,12,6,3,2,1,1,1,1,1,1,1],
     level:1,
-    gameOver: new Audio("car-crash-sound-effect_5tCU2cAR.mp3"),
-    levelUp: new Audio("levelup.mp3")
+    gameOver: new Audio("car-crash-sound-effect_5tCU2cAR.mp3")
   };
 
   const createMap = () => {
@@ -101,12 +96,6 @@ const app = {
       if (char === "O") {
         return $("<img>").addClass("obstacle").attr("src",obstacle);
       }
-      if (char === "T") {
-        return $("<img>").addClass("train").attr("src",train);
-      }
-      if (char === "TT") {
-        return $("<img>").addClass("traintrack").attr("src",traintrack);
-      }
   }
   
 
@@ -125,7 +114,6 @@ const startGame=()=>{
         x++;
         carMovement(x,app.gameSpeed);
         reversecarMovement(x,app.gameSpeed);
-        trainMovement(x);
         },1);
 }
 
@@ -211,24 +199,6 @@ const findCar = () => {
       }
       
     }
-  }
-
-  const trainMovement=(clock)=>{
-    if (clock%1000===0){
-    for (let i=0; i<app.gameState[7].length;i++){
-      if(checkHumanCollision(app.gameState[7][i])==="crash"){
-        restartGame();
-      }
-      app.gameState[7][i]="T";
-    }
-  }
-    if (clock%1500===0){
-    for (let i=0; i<app.gameState[7].length;i++){
-      app.gameState[7][i]="TT";
-    }
-  }
-  createMap();
-  
   }
 
   const moveCharacter = (event) => {
@@ -345,7 +315,7 @@ const findCar = () => {
   }
 
   const checkCollision = (newPos) => {
-    if (newPos === "C" ||newPos==="RC" || newPos==="T") {
+    if (newPos === "C" ||newPos==="RC") {
       return "crash";
     }
   }
@@ -367,7 +337,6 @@ const restartGame=()=>{
     else{
         console.log(app.lives);
     $("#app").empty();
-    app.gameSpeed=app.gameSpeedLevels[0];
       app.gameState = [...app.originalGameState];
       app.charPos = app.charPosStart;
       app.previousPosTerrain = "X";
@@ -377,7 +346,6 @@ const restartGame=()=>{
     
     }
     const levelUp=()=>{
-      app.levelUp.play();
       app.level++;
       $("#app").empty();
       app.gameState = [...app.originalGameState];
