@@ -68,6 +68,7 @@ const app = {
 
   const createMap = () => {
     $("#app").empty();
+    $("#app").append($("<div>").text("Hint: Use W,A,S,D for character movement.").attr("id","hint"));
     const $lives=$("<div>").text("lives remaining: "+app.lives).attr("id","lives");
     const $level=$("<div>").text("level: " +app.level).attr("id","level");
     const $div=$("<div>").attr("id","gamestatus").append($level).append($lives);
